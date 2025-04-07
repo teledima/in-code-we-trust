@@ -1,0 +1,1 @@
+database_url = "postgresql://postgres:postgres@localhost:5432/in_code_we_trust"

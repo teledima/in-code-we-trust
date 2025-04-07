@@ -1,0 +1,22 @@
+[project]
+name = "app"
+description = "Flask application"
+dynamic = [ "version" ]
+authors = [
+    { name = "Дмитрий Телегин", email = "teledima00@gmail.com"}
+]
+
+[tool.poetry]
+version = "0.1"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+flask = "^3.0.0"
+sqlalchemy = "^2.0.0"
+psycopg2-binary = "^2.9.9"
+alembic = "^1.13.1"
+dynaconf = "^3.2.10"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api" 
