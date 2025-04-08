@@ -35,6 +35,18 @@ python run.py
 
 The application will be available at `http://localhost:8000`
 
+## Running the Application using docker
+
+1. Build image
+```bash
+docker build -t in-code-we-trust:1.0 .
+```
+
+2. Run container
+```bash
+docker run -d --network host --name server in-code-we-trust:1.0
+```
+
 ## API Endpoints
 
 ### Products
