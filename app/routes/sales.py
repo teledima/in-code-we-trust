@@ -3,10 +3,17 @@ from datetime import date
 from flask import Blueprint, request
 from sqlalchemy import func, select
 
+from app.cache import cache
 from app.database import SessionLocal
 from app.models import Product, Sales
 
 bp_sales = Blueprint('sales', __name__, url_prefix='/api/sales')
+
+DEFAULT_TTL = 60 * 5
+
+
+def get_cache_key():
+    return request.args.get('start_date') + ':' + request.args.get('end_date')
 
 
 @bp_sales.before_request
@@ -24,6 +31,7 @@ def validate_dates():
 
 
 @bp_sales.get('/total')
+@cache.cached(ttl=DEFAULT_TTL, key_factory=get_cache_key)
 def get_total():
     start_date, end_date = date.fromisoformat(request.args['start_date']), date.fromisoformat(request.args['end_date'])
 
@@ -33,6 +41,7 @@ def get_total():
 
 
 @bp_sales.get('/top-products')
+@cache.cached(ttl=DEFAULT_TTL, key_factory=get_cache_key)
 def get_top_products():
     start_date, end_date = date.fromisoformat(request.args['start_date']), date.fromisoformat(request.args['end_date'])
 
