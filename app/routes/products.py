@@ -63,13 +63,13 @@ def update_product():
 
     try:
         with SessionLocal() as session:
-            # Создаем новый продукт
+            # Получаем продукт по id
             product_for_update = session.execute(select(Product).where(Product.id == data['id'])).scalar()
 
             if not product_for_update:
                 return jsonify({'error': 'Product not found'}), 404
 
-            # Добавляем и коммитим
+            # Обновляем поля и коммитим
             product_for_update.name = data['name']
             product_for_update.category_id = data['category_id']
             session.commit()
@@ -86,7 +86,6 @@ def update_product():
 
 @bp_products.delete('<int:product_id>')
 def delete_product(product_id: int):
-    # Валидация входных данных
     with SessionLocal() as session:
         session.execute(delete(Product).where(Product.id == product_id))
         session.commit()

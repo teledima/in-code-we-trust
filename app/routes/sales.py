@@ -13,15 +13,17 @@ DEFAULT_TTL = 60 * 5
 
 
 def get_cache_key():
+    """Генерация ключа кэша на основе параметров запроса (даты начала и конца)"""
     return request.args.get('start_date') + ':' + request.args.get('end_date')
 
 
 @bp_sales.before_request
 def validate_dates():
+    """Проверка валидности дат перед обработкой запроса"""
     start_date, end_date = request.args.get('start_date'), request.args.get('end_date')
 
     if start_date is None or end_date is None:
-        return 'You must specify the dates.'
+        return {'error': 'You must specify the dates.'}, 400
 
     start_date = date.fromisoformat(start_date)
     end_date = date.fromisoformat(end_date)
@@ -33,6 +35,7 @@ def validate_dates():
 @bp_sales.get('/total')
 @cache.cached(ttl=DEFAULT_TTL, key_factory=get_cache_key)
 def get_total():
+    """Получение общей суммы продаж за указанный период (с кэшированием)"""
     start_date, end_date = date.fromisoformat(request.args['start_date']), date.fromisoformat(request.args['end_date'])
 
     with SessionLocal() as session:
@@ -43,6 +46,7 @@ def get_total():
 @bp_sales.get('/top-products')
 @cache.cached(ttl=DEFAULT_TTL, key_factory=get_cache_key)
 def get_top_products():
+    """Получение топ-10 товаров по объему продаж за указанный период (с кэшированием)"""
     start_date, end_date = date.fromisoformat(request.args['start_date']), date.fromisoformat(request.args['end_date'])
 
     with SessionLocal() as session:
