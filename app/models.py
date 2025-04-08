@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, String
+from sqlalchemy import DateTime, Float, ForeignKey, String
 from sqlalchemy.orm import Mapped, declarative_base, mapped_column
 
 Base = declarative_base()
@@ -27,4 +27,5 @@ class Sales(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     product_id: Mapped[int] = mapped_column(ForeignKey("products.id"), nullable=False)
     amount: Mapped[int] = mapped_column(nullable=False)
+    discount: Mapped[float] = mapped_column(Float(), nullable=True)
     dt: Mapped[datetime] = mapped_column(DateTime(), nullable=False)
