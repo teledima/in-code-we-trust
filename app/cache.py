@@ -1,7 +1,13 @@
 import functools
+import logging
 import pickle
+import sys
 from collections.abc import Callable
 from time import time
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+logger.addHandler(logging.StreamHandler(sys.stdout))
 
 
 class Cache:
@@ -64,8 +70,11 @@ class Cache:
 
                 # Если значение есть в кэше, возвращаем его, иначе вызываем функцию и сохраняем результат в кэш
                 if cached is None:
+                    logger.info(f'{key} - miss')
                     self.add(key, func(*args, **kwargs), ttl)
                     return self.get(key)
+
+                logger.info(f'{key} - hit')
                 return cached
             return wrapper
         return decorator
